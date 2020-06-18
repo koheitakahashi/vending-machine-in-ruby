@@ -1,6 +1,6 @@
 # vending-machine-in-ruby
 
-[TDDBC大阪3\.0/課題（自動販売機問題）](http://devtesting.jp/tddbc/?TDDBC%E5%A4%A7%E9%98%AA3.0%2F%E8%AA%B2%E9%A1%8C)の課題をRubyで解くための解答テンプレートです。
+[Suica版自動販売機問題](https://gist.github.com/JunichiIto/201e7e70b64d9f6b576b6b6d6ffc9dc5)の課題をRubyで解くための解答テンプレートです。
 
 ## How to setup
 
@@ -32,15 +32,15 @@ $ bundle install
 
 ```
 $ bundle exec rake
-Run options: --seed 16161
+Run options: --seed 56203
 
 # Running:
 
-.
+..
 
-Finished in 0.000781s, 1280.4097 runs/s, 1280.4097 assertions/s.
+Finished in 0.001101s, 1816.5304 runs/s, 1816.5304 assertions/s.
 
-1 runs, 1 assertions, 0 failures, 0 errors, 0 skips
+2 runs, 2 assertions, 0 failures, 0 errors, 0 skips
 ```
 
 ## How to answer
