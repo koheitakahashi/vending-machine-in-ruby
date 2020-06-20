@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 require 'drink'
+require 'history'
 
 class VendingMachine
-  attr_accessor :drink_stocks, :sales_amount
+  attr_accessor :drink_stocks, :sales_amount, :history
 
   def initialize
     @drink_stocks = [
@@ -11,8 +12,10 @@ class VendingMachine
       @redbull = Drink.new(price: 200, name: "レッドブル", stock: 5)
     ]
     @sales_amount = 0
+    @history = History.new
   end
 
+  # TODO カプセル化すること
   def can_purchase?(str)
     find_drink(str).stock > 0
   end
@@ -26,6 +29,8 @@ class VendingMachine
     suica.deposit -= @selected_drink.price
     @selected_drink.stock -= 1
     @sales_amount += @selected_drink.price
+
+    @history.save(sales_time: Time.now, user: suica.user)
   end
 
   def find_drink(str)

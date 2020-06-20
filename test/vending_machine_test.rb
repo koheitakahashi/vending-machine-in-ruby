@@ -16,6 +16,8 @@ class VendingMachineTest < Minitest::Test
   #   # 自動販売機は格納されているジュースの情報（値段と名前と在庫）を取得できる。
   # end
 
+  # TODO 共通化できるところは共通化すること
+
   def test_step_1_格納されている1種類のジュースの値段と名前と在庫を取得できる
     machine = VendingMachine.new
     actual = machine.find_drink("コーラ").name
@@ -26,6 +28,7 @@ class VendingMachineTest < Minitest::Test
   # 以下、step2以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
   def test_step_2_自動販売機は在庫の点で、コーラが購入できるかどうかを取得できる。
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(120)
 
     machine = VendingMachine.new
@@ -36,6 +39,7 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_2_チャージ残高が足りない場合、購入操作を行っても何もしない。
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(0)
 
     machine = VendingMachine.new
@@ -45,6 +49,7 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_2_在庫がない場合、購入操作を行っても何もしない。
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(120)
 
     machine = VendingMachine.new
@@ -55,6 +60,7 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_2_ジュース値段以上のチャージ残高がある条件下で購入すると、自動販売機はジュースの在庫を減らし、売り上げ金額を増やし、Suicaのチャージ残高を減らす。
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(120)
 
     machine = VendingMachine.new
@@ -74,6 +80,7 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_3_レッドブルを購入することができる
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(200)
 
     machine = VendingMachine.new
@@ -86,6 +93,7 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_3_水を購入することができる
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(100)
 
     machine = VendingMachine.new
@@ -98,12 +106,14 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_5_ジュースが購入されたタイミングで、販売日時とSuica利用者の年齢と性別を記録する
     suica = Suica.new
+    suica.store_user(26, :man)
     suica.charge(100)
 
+    # TODO purchaseというメソッド名をbuyにする
     machine = VendingMachine.new
     machine.purchase(suica, "水")
 
-    expected =
-    assert_equal
+    expected = { sales_time: Time.new(2020), user_age: 26, user_sex: :man }
+    assert_equal expected, machine.history.show.first
   end
 end
