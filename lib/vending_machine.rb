@@ -22,20 +22,31 @@ class VendingMachine
   end
 
   def purchase(suica, str)
-    return "チャージ残高が足りません" if suica.deposit < first_drink_stocks[:price]
-    return "在庫がありません" unless display_purchasable_list.include?(str)
+    find_drink(str)
 
-    purchasable_list.each do |drink|
-      @drink = drink if drink[:name] === str
-    end
+    return "チャージ残高が足りません" if suica.deposit < @drink[:price]
+    return "在庫がありません" if @drink[:stock] === 0
 
     suica.deposit -= @drink[:price]
     @drink[:stock] -= 1
     @sales_amount += @drink[:price]
   end
 
+  def find_drink(str)
+    purchasable_list.each do |drink|
+      @drink = drink if drink[:name] === str
+    end
+    @drink
+  end
+
   def purchasable_list
-    @drink_stocks.map { |drink| drink if drink[:stock] > 1 }
+    @drink_stocks.map do |drink|
+      if drink[:stock] > 0
+        drink
+      else
+        { price: nil, name: nil, stock: nil }
+      end
+    end
   end
 
   def display_purchasable_list
