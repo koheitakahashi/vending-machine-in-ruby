@@ -12,10 +12,13 @@ class VendingMachine
     @drink_stocks.first
   end
 
+  def can_purchase?
+    first_drink_stocks[:stock] > 0
+  end
+
   def purchase(suica)
     return "チャージ残高が足りません" if suica.deposit < first_drink_stocks[:price]
-
-    return "在庫がありません" if first_drink_stocks[:stock] === 0
+    return "在庫がありません" unless can_purchase?
 
     suica.deposit -= first_drink_stocks[:price]
     first_drink_stocks[:stock] -= 1

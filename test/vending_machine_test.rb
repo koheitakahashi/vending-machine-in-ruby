@@ -24,6 +24,16 @@ class VendingMachineTest < Minitest::Test
   end
 
   # 以下、step2以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
+  def test_step_2_自動販売機は在庫の点で、コーラが購入できるかどうかを取得できる。
+    suica = Suica.new
+    suica.charge(120)
+
+    machine = VendingMachine.new
+    machine.first_drink_stocks[:stock] = 0
+
+    assert_equal false, machine.can_purchase?
+  end
+
   def test_step_2_現在の売上金額を取得できる
     machine = VendingMachine.new
 
