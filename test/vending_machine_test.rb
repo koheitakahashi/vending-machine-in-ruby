@@ -95,4 +95,15 @@ class VendingMachineTest < Minitest::Test
     assert_equal(4, machine.find_drink("水").stock)
     assert_equal(100, machine.sales_amount)
   end
+
+  def test_step_5_ジュースが購入されたタイミングで、販売日時とSuica利用者の年齢と性別を記録する
+    suica = Suica.new
+    suica.charge(100)
+
+    machine = VendingMachine.new
+    machine.purchase(suica, "水")
+
+    expected =
+    assert_equal
+  end
 end
