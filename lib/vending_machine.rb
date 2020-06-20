@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
 class VendingMachine
-  def drink_info
-    { price: 120, name: "コーラ", stock: 5 }
+  attr_accessor :drink_stocks
+
+  def initialize
+    @drink_stocks = [{ price: 120, name: 'コーラ', stock: 5 }]
+  end
+
+  def first_drink_stocks
+    @drink_stocks.first
   end
 end

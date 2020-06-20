@@ -17,9 +17,9 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_1_格納されている1種類のジュースの値段と名前と在庫を取得できる
     machine = VendingMachine.new
-    expected = { price: 120, name: "コーラ", stock: 5 }
+    expected = { price: 120, name: 'コーラ', stock: 5 }
 
-    assert_equal expected, machine.drink_info
+    assert_equal expected, machine.first_drink_stocks
   end
 
   # 以下、step2以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
