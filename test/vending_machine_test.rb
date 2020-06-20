@@ -18,9 +18,9 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_1_格納されている1種類のジュースの値段と名前と在庫を取得できる
     machine = VendingMachine.new
-    expected = { price: 120, name: 'コーラ', stock: 5 }
+    actual = machine.find_drink("コーラ").name
 
-    assert_equal expected, machine.find_drink("コーラ")
+    assert_equal "コーラ", actual
   end
 
   # 以下、step2以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
@@ -29,15 +29,9 @@ class VendingMachineTest < Minitest::Test
     suica.charge(120)
 
     machine = VendingMachine.new
-    machine.find_drink("コーラ")[:stock] = 0
+    machine.find_drink("コーラ").stock = 0
 
     assert_equal false, machine.can_purchase?("コーラ")
-  end
-
-  def test_step_2_現在の売上金額を取得できる
-    machine = VendingMachine.new
-
-    assert_equal 0, machine.sales_amount
   end
 
   def test_step_2_チャージ残高が足りない場合、購入操作を行っても何もしない。
@@ -54,7 +48,7 @@ class VendingMachineTest < Minitest::Test
     suica.charge(120)
 
     machine = VendingMachine.new
-    machine.find_drink("コーラ")[:stock] = 0
+    machine.find_drink("コーラ").stock = 0
 
     assert_equal("在庫がありません", machine.purchase(suica, "コーラ"))
   end
@@ -67,7 +61,7 @@ class VendingMachineTest < Minitest::Test
     machine.purchase(suica, "コーラ")
 
     assert_equal(0, suica.deposit)
-    assert_equal(4, machine.find_drink("コーラ")[:stock])
+    assert_equal(4, machine.find_drink("コーラ").stock)
     assert_equal(120, machine.sales_amount)
   end
 
@@ -75,7 +69,7 @@ class VendingMachineTest < Minitest::Test
     machine = VendingMachine.new
     expected = ["水", "コーラ", "レッドブル"]
 
-    assert_equal expected, machine.display_purchasable_list
+    assert_equal expected, machine.purchasable_name_list
   end
 
   def test_step_3_レッドブルを購入することができる
@@ -86,7 +80,7 @@ class VendingMachineTest < Minitest::Test
     machine.purchase(suica, "レッドブル")
 
     assert_equal(0, suica.deposit)
-    assert_equal(4, machine.drink[:stock])
+    assert_equal(4, machine.find_drink("レッドブル").stock)
     assert_equal(200, machine.sales_amount)
   end
 
@@ -98,7 +92,7 @@ class VendingMachineTest < Minitest::Test
     machine.purchase(suica, "水")
 
     assert_equal(0, suica.deposit)
-    assert_equal(4, machine.drink[:stock])
+    assert_equal(4, machine.find_drink("水").stock)
     assert_equal(100, machine.sales_amount)
   end
 end
