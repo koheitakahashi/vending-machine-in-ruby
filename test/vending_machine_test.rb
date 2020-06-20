@@ -29,9 +29,9 @@ class VendingMachineTest < Minitest::Test
     suica.charge(120)
 
     machine = VendingMachine.new
-    machine.first_drink_stocks[:stock] = 0
+    machine.find_drink("コーラ")[:stock] = 0
 
-    assert_equal false, machine.can_purchase?
+    assert_equal false, machine.can_purchase?("コーラ")
   end
 
   def test_step_2_現在の売上金額を取得できる

@@ -13,12 +13,8 @@ class VendingMachine
     @sales_amount = 0
   end
 
-  def first_drink_stocks
-    @drink_stocks.first
-  end
-
-  def can_purchase?
-    first_drink_stocks[:stock] > 0
+  def can_purchase?(str)
+    find_drink(str)[:stock] > 0
   end
 
   def purchase(suica, str)
