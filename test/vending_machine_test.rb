@@ -70,4 +70,35 @@ class VendingMachineTest < Minitest::Test
     assert_equal(4, machine.first_drink_stocks[:stock])
     assert_equal(120, machine.sales_amount)
   end
+
+  def test_step_3_自動販売機は在庫の点で購入可能なドリンクのリストを取得できる。
+    machine = VendingMachine.new
+    expected = ["水", "コーラ", "レッドブル"]
+
+    assert_equal expected, machine.display_purchasable_list
+  end
+
+  def test_step_3_レッドブルを購入することができる
+    suica = Suica.new
+    suica.charge(200)
+
+    machine = VendingMachine.new
+    machine.purchase(suica, "レッドブル")
+
+    assert_equal(0, suica.deposit)
+    assert_equal(4, machine.drink[:stock])
+    assert_equal(200, machine.sales_amount)
+  end
+
+  def test_step_3_水を購入することができる
+    suica = Suica.new
+    suica.charge(100)
+
+    machine = VendingMachine.new
+    machine.purchase(suica, "水")
+
+    assert_equal(0, suica.deposit)
+    assert_equal(4, machine.drink[:stock])
+    assert_equal(100, machine.sales_amount)
+  end
 end
