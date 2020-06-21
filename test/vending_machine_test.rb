@@ -5,17 +5,6 @@ require './lib/vending_machine'
 require './lib/suica'
 
 class VendingMachineTest < Minitest::Test
-  # def test_step_1_ジュースの管理
-  #   # 以下の2行は動作確認用のコードなので削除して良い
-  #   machine = VendingMachine.new
-  #   assert !machine.nil?
-  #
-  #   # 以下の要求仕様（テストケース）は必要に応じてテストメソッド（def test_xxx）を分けても良い
-  #   #
-  #   # 自動販売機は値段と名前の属性からなるジュースを１種類格納できる。初期状態で、コーラ（値段:120円、名前”コーラ”）を5本格納している。
-  #   # 自動販売機は格納されているジュースの情報（値段と名前と在庫）を取得できる。
-  # end
-
   # TODO 共通化できるところは共通化すること
 
   def test_step_1_格納されている1種類のジュースの値段と名前と在庫を取得できる
@@ -112,8 +101,16 @@ class VendingMachineTest < Minitest::Test
     # TODO purchaseというメソッド名をbuyにする
     machine = VendingMachine.new
     machine.purchase(suica, "水")
+    machine.show_sales_history(1).first[:sales_time] = Time.new(2020)
 
-    expected = { sales_time: Time.new(2020), user_age: 26, user_sex: :man }
-    assert_equal expected, machine.history.show.first
+    expected = [{
+      sales_time: Time.new(2020),
+      user: {
+        age: 26,
+        sex: :man
+      }
+    }]
+
+    assert_equal expected, machine.show_sales_history(1)
   end
 end

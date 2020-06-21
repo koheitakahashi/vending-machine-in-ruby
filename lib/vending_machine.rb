@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 require 'drink'
-require 'history'
 
 class VendingMachine
-  attr_accessor :drink_stocks, :sales_amount, :history
+  attr_accessor :drink_stocks, :sales_amount
 
   def initialize
     @drink_stocks = [
@@ -12,7 +11,7 @@ class VendingMachine
       @redbull = Drink.new(price: 200, name: "レッドブル", stock: 5)
     ]
     @sales_amount = 0
-    @history = History.new
+    @sales_history_list = []
   end
 
   # TODO カプセル化すること
@@ -30,7 +29,7 @@ class VendingMachine
     @selected_drink.stock -= 1
     @sales_amount += @selected_drink.price
 
-    @history.save(sales_time: Time.now, user: suica.user)
+    save_sales_history(Time.now, suica.user)
   end
 
   def find_drink(str)
@@ -48,5 +47,13 @@ class VendingMachine
 
   def purchasable_name_list
     purchasable_list.map { |drink| drink.name }
+  end
+
+  def save_sales_history(sales_time, user)
+    @sales_history_list << { sales_time: sales_time, user: { age: user.age, sex: user.sex } }
+  end
+
+  def show_sales_history(num)
+    @sales_history_list.take(num)
   end
 end
