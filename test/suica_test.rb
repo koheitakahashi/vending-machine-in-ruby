@@ -30,10 +30,9 @@ class SuicaTest < Minitest::Test
     assert_equal(200, @suica.deposit)
   end
 
-  # 以下、step1以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
-
   def test_step_4_利用者の年齢と性別を保存できる
-    @suica.store_user(26, :man)
+    user = User.new(26, :man)
+    @suica.save_user(user)
 
     assert_equal(26, @suica.user.age)
     assert_equal(:man, @suica.user.sex)

@@ -15,7 +15,7 @@ class Suica
     @deposit
   end
 
-  def store_user(age, sex)
-    @user = User.new(age, sex)
+  def save_user(user)
+    @user = user
   end
 end
