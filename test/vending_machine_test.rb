@@ -16,8 +16,9 @@ class VendingMachineTest < Minitest::Test
 
   # 以下、step2以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
   def test_step_2_自動販売機は在庫の点で、コーラが購入できるかどうかを取得できる。
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(120)
 
     machine = VendingMachine.new
@@ -30,8 +31,9 @@ class VendingMachineTest < Minitest::Test
   end
 
   def test_step_2_チャージ残高が足りない場合、購入操作を行っても何もしない。
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(0)
 
     machine = VendingMachine.new
@@ -40,8 +42,9 @@ class VendingMachineTest < Minitest::Test
   end
 
   def test_step_2_在庫がない場合、購入操作を行っても何もしない。
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(120)
 
     machine = VendingMachine.new
@@ -54,8 +57,9 @@ class VendingMachineTest < Minitest::Test
   end
 
   def test_step_2_ジュース値段以上のチャージ残高がある条件下で購入すると、自動販売機はジュースの在庫を減らし、売り上げ金額を増やし、Suicaのチャージ残高を減らす。
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(120)
 
     machine = VendingMachine.new
@@ -67,8 +71,9 @@ class VendingMachineTest < Minitest::Test
   end
 
   def test_step_3_レッドブルを購入することができる
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(200)
 
     machine = VendingMachine.new
@@ -80,8 +85,9 @@ class VendingMachineTest < Minitest::Test
   end
 
   def test_step_3_水を購入することができる
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(100)
 
     machine = VendingMachine.new
@@ -93,8 +99,9 @@ class VendingMachineTest < Minitest::Test
   end
 
   def test_step_5_ジュースが購入されたタイミングで、販売日時とSuica利用者の年齢と性別を記録する
+    user = User.new(26, :man)
     suica = Suica.new
-    suica.store_user(26, :man)
+    suica.save_user(user)
     suica.charge(100)
 
     machine = VendingMachine.new
@@ -103,12 +110,11 @@ class VendingMachineTest < Minitest::Test
 
     expected = [{
       sales_time: Time.new(2020),
-      user: {
-        age: 26,
-        sex: :man
-      }
+      user: user
     }]
 
     assert_equal expected, machine.show_sales_history(1)
+    assert_equal 26, machine.show_sales_history(1).first[:user].age
+    assert_equal :man, machine.show_sales_history(1).first[:user].sex
   end
 end
