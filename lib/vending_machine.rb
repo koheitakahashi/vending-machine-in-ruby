@@ -61,6 +61,6 @@ class VendingMachine
     end
 
     def save_sales_history(sales_time, user)
-      @sales_history_list << { sales_time: sales_time, user: { age: user.age, sex: user.sex } }
+      @sales_history_list << { sales_time: sales_time, user: user }
     end
 end
