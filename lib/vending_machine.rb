@@ -37,10 +37,6 @@ class VendingMachine
     @drink_stocks.select { |drink| drink.name === drink_name }.count
   end
 
-  def purchasable_list
-    @drink_stocks.map { |drink| drink }.uniq
-  end
-
   def show_sales_history(num)
     @sales_history_list.take(num)
   end
