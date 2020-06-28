@@ -4,13 +4,6 @@ require 'minitest/autorun'
 require './lib/suica'
 
 class SuicaTest < Minitest::Test
-  # def test_step_0_Suicaのチャージ
-  # 以下の要求仕様（テストケース）は必要に応じてテストメソッド（def test_xxx）を分けても良い
-  #
-  # Suicaには100円以上の任意の金額をチャージできる
-  # Suicaは現在のチャージ残高を取得できる。
-  # end
-
   def setup
     @suica = Suica.new
   end
@@ -31,10 +24,10 @@ class SuicaTest < Minitest::Test
   end
 
   def test_step_4_利用者の年齢と性別を保存できる
-    user = User.new(26, :man)
+    user = User.new(26, "man")
     @suica.save_user(user)
 
     assert_equal(26, @suica.user.age)
-    assert_equal(:man, @suica.user.sex)
+    assert_equal("man", @suica.user.sex)
   end
 end
