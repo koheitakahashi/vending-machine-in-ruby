@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "user"
+require 'user'
 
 class Suica
   attr_accessor :deposit, :user

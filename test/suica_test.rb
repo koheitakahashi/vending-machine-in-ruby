@@ -24,10 +24,10 @@ class SuicaTest < Minitest::Test
   end
 
   def test_step_4_利用者の年齢と性別を保存できる
-    user = User.new(26, "man")
+    user = User.new(26, 'man')
     @suica.save_user(user)
 
     assert_equal(26, @suica.user.age)
-    assert_equal("man", @suica.user.sex)
+    assert_equal('man', @suica.user.sex)
   end
 end
