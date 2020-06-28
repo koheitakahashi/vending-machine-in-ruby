@@ -9,9 +9,9 @@ class VendingMachineTest < Minitest::Test
 
   def test_step_1_格納されている1種類のジュースの値段と名前と在庫を取得できる
     machine = VendingMachine.new
-    actual = machine.find_drink("コーラ").name
+    actual = machine.select_drink("コーラ")
 
-    assert_equal "コーラ", actual
+    assert_equal "コーラ", actual.name
   end
 
   # 以下、step2以降の要求仕様も同様にTDDで自動販売機プログラムを書いていく
@@ -21,9 +21,12 @@ class VendingMachineTest < Minitest::Test
     suica.charge(120)
 
     machine = VendingMachine.new
-    machine.find_drink("コーラ").stock = 0
 
-    assert_equal false, machine.can_purchase?("コーラ")
+    5.times do
+      machine.buy(suica, "コーラ")
+    end
+
+    assert_nil nil, machine.select_drink("コーラ")
   end
 
   def test_step_2_チャージ残高が足りない場合、購入操作を行っても何もしない。
@@ -33,7 +36,7 @@ class VendingMachineTest < Minitest::Test
 
     machine = VendingMachine.new
 
-    assert_equal("チャージ残高が足りません", machine.purchase(suica, "コーラ"))
+    assert_nil machine.buy(suica, "コーラ")
   end
 
   def test_step_2_在庫がない場合、購入操作を行っても何もしない。
@@ -42,9 +45,12 @@ class VendingMachineTest < Minitest::Test
     suica.charge(120)
 
     machine = VendingMachine.new
-    machine.find_drink("コーラ").stock = 0
 
-    assert_equal("在庫がありません", machine.purchase(suica, "コーラ"))
+    5.times do
+      machine.buy(suica, "コーラ")
+    end
+
+    assert_nil machine.buy(suica, "コーラ")
   end
 
   def test_step_2_ジュース値段以上のチャージ残高がある条件下で購入すると、自動販売機はジュースの在庫を減らし、売り上げ金額を増やし、Suicaのチャージ残高を減らす。
@@ -53,18 +59,11 @@ class VendingMachineTest < Minitest::Test
     suica.charge(120)
 
     machine = VendingMachine.new
-    machine.purchase(suica, "コーラ")
+    machine.buy(suica, "コーラ")
 
     assert_equal(0, suica.deposit)
-    assert_equal(4, machine.find_drink("コーラ").stock)
+    assert_equal(4, machine.show_stock("コーラ"))
     assert_equal(120, machine.sales_amount)
-  end
-
-  def test_step_3_自動販売機は在庫の点で購入可能なドリンクのリストを取得できる。
-    machine = VendingMachine.new
-    expected = ["水", "コーラ", "レッドブル"]
-
-    assert_equal expected, machine.purchasable_name_list
   end
 
   def test_step_3_レッドブルを購入することができる
@@ -73,10 +72,10 @@ class VendingMachineTest < Minitest::Test
     suica.charge(200)
 
     machine = VendingMachine.new
-    machine.purchase(suica, "レッドブル")
+    machine.buy(suica, "レッドブル")
 
     assert_equal(0, suica.deposit)
-    assert_equal(4, machine.find_drink("レッドブル").stock)
+    assert_equal(4, machine.show_stock("レッドブル"))
     assert_equal(200, machine.sales_amount)
   end
 
@@ -86,10 +85,10 @@ class VendingMachineTest < Minitest::Test
     suica.charge(100)
 
     machine = VendingMachine.new
-    machine.purchase(suica, "水")
+    machine.buy(suica, "水")
 
     assert_equal(0, suica.deposit)
-    assert_equal(4, machine.find_drink("水").stock)
+    assert_equal(4, machine.show_stock("水"))
     assert_equal(100, machine.sales_amount)
   end
 
@@ -98,9 +97,8 @@ class VendingMachineTest < Minitest::Test
     suica.store_user(26, :man)
     suica.charge(100)
 
-    # TODO purchaseというメソッド名をbuyにする
     machine = VendingMachine.new
-    machine.purchase(suica, "水")
+    machine.buy(suica, "水")
     machine.show_sales_history(1).first[:sales_time] = Time.new(2020)
 
     expected = [{
