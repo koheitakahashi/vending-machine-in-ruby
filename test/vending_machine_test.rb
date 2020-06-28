@@ -6,7 +6,7 @@ require './lib/suica'
 
 class VendingMachineTest < Minitest::Test
   def setup
-    @user = User.new(26, :man)
+    @user = User.new(26, "man")
     @suica = Suica.new
     @suica.save_user(@user)
   end
@@ -98,6 +98,6 @@ class VendingMachineTest < Minitest::Test
 
     assert_equal expected, machine.show_sales_history(1)
     assert_equal 26, machine.show_sales_history(1).first[:user].age
-    assert_equal :man, machine.show_sales_history(1).first[:user].sex
+    assert_equal "man", machine.show_sales_history(1).first[:user].sex
   end
 end
